@@ -158,6 +158,14 @@ def tournaments():
         html += "<p>Турниров пока нет.</p>"
 
     for i, tournament in enumerate(tournaments_list):
+        conn = sqlite3.connect("chess_school.db")
+        cursor = conn.cursor()
+        cursor.execute(
+           "SELECT COUNT(*) FROM participants WHERE tournament_id = ?",
+           (i,)
+        )
+        participant_count = cursor.fetchone()[0]
+        conn.close()
         html += f"""
         <hr>
         <h2>{tournament['name']}</h2>
@@ -165,7 +173,7 @@ def tournaments():
         <p>🕐 {tournament['time']}</p>
         <p>♟ Туров: {tournament['rounds']}</p>
         <p>⏱ Контроль: {tournament['control']}</p>
-        <p>👥 Участники: {sum(1 for p in participants if p["tournament_id"] == i)} / {tournament['max_participants']}</p>
+        <p>👥 Участники: {participant_count} / {tournament['max_participants']}</p>
 
         <p>
             <a href="/register/{i}">

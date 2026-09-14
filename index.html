@@ -1,0 +1,673 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CHAMPION</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f4f6;
+            color: #222;
+        }
+
+        .header {
+            background: white;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .logo {
+            width: 180px;
+            max-width: 70%;
+        }
+
+        .subtitle {
+            margin-top: 10px;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 520px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        .menu {
+            display: grid;
+            gap: 12px;
+        }
+
+        .button {
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 14px;
+            background: white;
+            font-size: 17px;
+            text-align: left;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        .button:hover {
+            background: #eeeeee;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.07);
+            margin-bottom: 15px;
+        }
+
+        .back {
+            border: none;
+            background: #e5e7eb;
+            padding: 10px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+
+        .register {
+            width: 100%;
+            border: none;
+            background: #111827;
+            color: white;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .register:hover {
+            background: #374151;
+        }
+
+        label {
+            display: block;
+            margin-top: 14px;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ccc;
+            border-radius: 9px;
+            font-size: 16px;
+        }
+
+        .success {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .success-icon {
+            font-size: 50px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+<!-- ШАПКА -->
+
+<div class="header">
+
+    <img src="logo.jpeg" class="logo">
+
+    <div class="subtitle">
+        Профессиональная школа шахмат
+    </div>
+
+</div>
+
+
+<div class="container">
+
+
+<!-- ГЛАВНАЯ -->
+
+<div id="home" class="screen active">
+
+    <div class="card">
+
+        <h2>♟️ Добро пожаловать!</h2>
+
+        <p>
+            Школа шахмат им. IM Павла Гнусарева
+        </p>
+
+    </div>
+
+
+    <div class="menu">
+
+        <button class="button"
+                onclick="showScreen('profile')">
+            👤 Мой профиль
+        </button>
+
+        <button class="button"
+                onclick="showScreen('tournaments')">
+            ♟️ Турниры
+        </button>
+
+        <button class="button"
+                onclick="showScreen('schedule')">
+            📅 Расписание
+        </button>
+
+        <button class="button"
+                onclick="showScreen('results')">
+            🏆 Результаты
+        </button>
+
+        <button class="button"
+                onclick="showScreen('payment')">
+            💳 Оплата
+        </button>
+
+        <button class="button"
+                onclick="showScreen('notifications')">
+            🔔 Уведомления
+        </button>
+
+        <button class="button"
+                onclick="showScreen('contact')">
+            💬 Связаться со школой
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ПРОФИЛЬ -->
+
+<div id="profile" class="screen">
+
+    <button class="back"
+            onclick="showScreen('home')">
+        ← Назад
+    </button>
+
+    <div class="card">
+
+        <h2>👤 Мой профиль</h2>
+
+        <p><b>ФИО:</b> —</p>
+        <p><b>Год рождения:</b> —</p>
+        <p><b>ID FIDE:</b> —</p>
+        <p><b>Звание:</b> —</p>
+        <p><b>Разряд:</b> —</p>
+        <p><b>Телефон:</b> —</p>
+
+    </div>
+
+</div>
+
+
+<!-- ТУРНИРЫ -->
+
+<div id="tournaments" class="screen">
+
+    <button class="back"
+            onclick="showScreen('home')">
+        ← Назад
+    </button>
+
+    <h2>♟️ Турниры</h2>
+
+    <div class="card">
+
+        <h3>🏆 Чемпионат города</h3>
+
+        <p>📅 20 сентября 2026</p>
+        <p>⏰ Начало: 11:00</p>
+        <p>⚡ Контроль: 10+5</p>
+        <p>♟️ 9 туров</p>
+
+        <button class="register"
+                onclick="showScreen('registration')">
+
+            📝 Зарегистрироваться
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- РЕГИСТРАЦИЯ -->
+
+<div id="registration" class="screen">
+
+    <button class="back"
+            onclick="showScreen('tournaments')">
+        ← Назад
+    </button>
+
+    <h2>📝 Регистрация участника</h2>
+
+    <div class="card">
+
+        <form id="registrationForm">
+
+            <label>ФИО участника *</label>
+
+            <input
+                type="text"
+                id="fullName"
+                placeholder="Введите ФИО"
+                required
+            >
+
+
+            <label>Год рождения *</label>
+
+            <input
+                type="number"
+                id="birthYear"
+                placeholder="Например: 2014"
+                min="1900"
+                max="2026"
+                required
+            >
+
+
+            <label>ID FIDE</label>
+
+            <input
+                type="text"
+                id="fideId"
+                placeholder="Если есть"
+            >
+
+
+            <label>Спортивное звание</label>
+
+            <select id="title">
+
+                <option value="">
+                    Не указано
+                </option>
+
+                <option>Нет</option>
+
+                <option>III разряд</option>
+
+                <option>II разряд</option>
+
+                <option>I разряд</option>
+
+                <option>КМС</option>
+
+                <option>МС</option>
+
+                <option>ММ</option>
+
+                <option>ГМ</option>
+
+            </select>
+
+            <label>Номер телефона *</label>
+
+            <input
+                type="tel"
+                id="phone"
+                placeholder="+7 777 123 45 67"
+                required
+            >
+
+
+            <br><br>
+
+            <button
+                type="button"
+                class="register"
+                onclick="checkRegistration()">
+
+                Продолжить
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- ПОДТВЕРЖДЕНИЕ -->
+
+<div id="confirmation" class="screen">
+
+    <button class="back"
+            onclick="showScreen('registration')">
+
+        ← Изменить данные
+
+    </button>
+
+
+    <h2>✅ Проверьте данные</h2>
+
+    <div class="card">
+
+        <p>
+            <b>ФИО:</b>
+            <span id="confirmName"></span>
+        </p>
+
+        <p>
+            <b>Год рождения:</b>
+            <span id="confirmYear"></span>
+        </p>
+
+        <p>
+            <b>ID FIDE:</b>
+            <span id="confirmFide"></span>
+        </p>
+
+        <p>
+            <b>Звание:</b>
+            <span id="confirmTitle"></span>
+        </p>
+
+        <p>
+            <b>Телефон:</b>
+            <span id="confirmPhone"></span>
+        </p>
+
+
+        <button
+            class="register"
+            onclick="finishRegistration()">
+
+            ✅ Подтвердить регистрацию
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- УСПЕШНАЯ РЕГИСТРАЦИЯ -->
+
+<div id="success" class="screen">
+
+    <div class="card success">
+
+        <div class="success-icon">
+            🎉
+        </div>
+
+        <h2>
+            Регистрация завершена!
+        </h2>
+
+        <p>
+            Вы успешно зарегистрированы
+            на турнир.
+        </p>
+
+        <p>
+            🏆 <b>Чемпионат города</b>
+        </p>
+
+        <p>
+            Ваши данные сохранены.
+        </p>
+
+        <button
+            class="register"
+            onclick="showScreen('home')">
+
+            На главную
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- РАСПИСАНИЕ -->
+
+<div id="schedule" class="screen">
+
+    <button class="back"
+            onclick="showScreen('home')">
+        ← Назад
+    </button>
+
+    <h2>📅 Расписание</h2>
+
+    <div class="card">
+
+        <p>15:00 — Группа начинающих</p>
+        <p>16:30 — Группа 2</p>
+        <p>18:00 — Продвинутая группа</p>
+
+    </div>
+
+</div>
+
+
+<!-- РЕЗУЛЬТАТЫ -->
+
+<div id="results" class="screen">
+
+    <button class="back"
+            onclick="showScreen('home')">
+        ← Назад
+    </button>
+
+    <h2>🏆 Результаты</h2>
+
+    <div class="card">
+
+        <p>Результатов пока нет.</p>
+
+    </div>
+
+</div>
+
+
+<!-- ОПЛАТА -->
+
+<div id="payment" class="screen">
+
+    <button class="back"
+            onclick="showScreen('home')">
+        ← Назад
+    </button>
+
+    <h2>💳 Оплата</h2>
+
+    <div class="card">
+
+        <p>Абонемент: сентябрь 2026</p>
+
+        <p>
+            Статус:
+            <b>Не оплачено</b>
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- УВЕДОМЛЕНИЯ -->
+
+<div id="notifications" class="screen">
+
+    <button class="back"
+            onclick="showScreen('home')">
+        ← Назад
+    </button>
+
+    <h2>🔔 Уведомления</h2>
+
+    <div class="card">
+
+        <p>Уведомлений пока нет.</p>
+
+    </div>
+
+</div>
+
+
+<!-- КОНТАКТЫ -->
+
+<div id="contact" class="screen">
+
+    <button class="back"
+            onclick="showScreen('home')">
+        ← Назад
+    </button>
+
+    <h2>💬 Связаться со школой</h2>
+
+    <div class="card">
+
+        <p>📞 Телефон школы</p>
+        <p>📍 Костанай</p>
+
+    </div>
+
+</div>
+
+
+</div>
+
+
+<script>
+
+
+function showScreen(screenId) {
+
+    const screens =
+        document.querySelectorAll('.screen');
+
+    screens.forEach(function(screen) {
+
+        screen.classList.remove('active');
+
+    });
+
+    document
+        .getElementById(screenId)
+        .classList.add('active');
+
+    window.scrollTo(0, 0);
+}
+
+
+function checkRegistration() {
+
+    const name = document.getElementById("fullName")?.value.trim() || "";
+    const year = document.getElementById("birthYear")?.value.trim() || "";
+    const fide = document.getElementById("fideId")?.value.trim() || "";
+    const title = document.getElementById("title")?.value || "";
+    const rank = document.getElementById("rank")?.value || "";
+    const phone = document.getElementById("phone")?.value.trim() || "";
+
+    if (name === "" || year === "" || phone === "") {
+        alert("Заполните ФИО, год рождения и номер телефона.");
+        return;
+    }
+
+    const confirmName = document.getElementById("confirmName");
+    const confirmYear = document.getElementById("confirmYear");
+    const confirmFide = document.getElementById("confirmFide");
+    const confirmTitle = document.getElementById("confirmTitle");
+    const confirmRank = document.getElementById("confirmRank");
+    const confirmPhone = document.getElementById("confirmPhone");
+
+    if (confirmName) confirmName.textContent = name;
+    if (confirmYear) confirmYear.textContent = year;
+    if (confirmFide) confirmFide.textContent = fide || "Не указан";
+    if (confirmTitle) confirmTitle.textContent = title || "Не указано";
+    if (confirmRank) confirmRank.textContent = rank || "Не указан";
+    if (confirmPhone) confirmPhone.textContent = phone;
+
+    showScreen("confirmation");
+}
+
+
+async function finishRegistration() {
+
+    const data = {
+        full_name: document.getElementById("fullName")?.value.trim() || "",
+        birth_year: document.getElementById("birthYear")?.value.trim() || "",
+        fide_id: document.getElementById("fideId")?.value.trim() || "",
+        title: document.getElementById("title")?.value || "",
+        rank: document.getElementById("rank")?.value || "",
+        phone: document.getElementById("phone")?.value.trim() || "",
+        tournament: "Чемпионат города"
+    };
+
+    try {
+
+        const response = await fetch("/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            showScreen("success");
+        } else {
+            alert("Ошибка регистрации: " + result.message);
+        }
+
+    } catch (error) {
+
+        console.error(error);
+        alert("Не удалось сохранить регистрацию.");
+    }
+}
+
+
+</script>
+
+
+</body>
+
+</html>

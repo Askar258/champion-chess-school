@@ -1,3 +1,7 @@
+
+
+
+
 #!/usr/bin/env python
 # coding: utf-8
 
@@ -292,19 +296,31 @@ def show_participants(tournament_id):
 
     tournament = tournaments_list[tournament_id]
 
-    html = f"<h1>📋 Участники</h1>"
-    html += f"<h2>{tournament['name']}</h2>"
+    conn = sqlite3.connect("chess_school.db")
+    cursor = conn.cursor()
 
-    for participant in participants:
-        if participant["tournament_id"] == tournament_id:
-            html += f"""
-            <hr>
-            <p>👤 <b>{participant['fio']}</b></p>
-            <p>🎂 Год рождения: {participant['birth_year']}</p>
-            <p>♟ FIDE ID: {participant['fide_id']}</p>
-            <p>🏅 Разряд: {participant['rank']}</p>
-            <p>📞 Телефон: {participant['phone']}</p>
-            """
+    cursor.execute("""
+        SELECT fio, birth_year, fide_id, rank, phone
+        FROM participants
+        WHERE tournament_id = ?
+    """, (tournament_id,))
+
+    rows = cursor.fetchall()
+    conn.close()
+
+    html = f"<h1>👥 Участники</h1>"
+    html += f"<h2>{tournament['name']}</h2>"
+    html += f"<p>Всего участников: {len(rows)}</p>"
+
+    for row in rows:
+        html += f"""
+        <hr>
+        <p>👤 <b>{row[0]}</b></p>
+        <p>🎂 Год рождения: {row[1]}</p>
+        <p>♟ FIDE ID: {row[2]}</p>
+        <p>🏅 Разряд: {row[3]}</p>
+        <p>📞 Телефон: {row[4]}</p>
+        """
 
     return html
 

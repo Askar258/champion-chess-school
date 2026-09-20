@@ -109,6 +109,7 @@ def home():
                 width: 100%;
                 box-sizing: border-box;
                 padding: 20px;
+                margin-bottom: 24px;
                 background: #171717;
                 color: white;
                 text-decoration: none;
@@ -139,19 +140,15 @@ def home():
                 Шахматы объединяют поколения
             </div>
 
-            <div class="tournament-button">
-    <a href="/tournaments" style="color:white; text-decoration:none;">
-        🏆 ТУРНИРЫ
-    </a>
+            <a href="/tournaments" class="tournament-button">
+                🏆 ТУРНИРЫ
+            </a>
 
-    <br><br>
+            <a href="/news" class="tournament-button">
+                📰 НОВОСТИ
+            </a>
 
-    <a href="/news" class="tournament-button">
-    📰 НОВОСТИ
-    </a>
-    </div>
-
-        </div>
+            </div>
 
     </body>
     </html>

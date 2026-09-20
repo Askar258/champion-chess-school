@@ -139,16 +139,91 @@ def home():
                 Шахматы объединяют поколения
             </div>
 
-            <a href="/tournaments" class="tournament-button">
-                🏆 ТУРНИРЫ
+            <div class="tournament-button">
+    <a href="/tournaments" style="color:white; text-decoration:none;">
+        🏆 ТУРНИРЫ
+    </a>
 
-            </a>
+    <br><br>
+
+    <a href="/news" class="tournament-button">
+    📰 НОВОСТИ
+    </a>
+    </div>
 
         </div>
 
     </body>
     </html>
     """
+@app.route("/news")
+def news():
+    conn = sqlite3.connect("chess_school.db")
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT id, title, text, date
+        FROM news
+        ORDER BY id DESC
+    """)
+
+    rows = cursor.fetchall()
+    conn.close()
+
+    html = """
+    <html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Новости</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                padding: 20px;
+                background: #f5f5f5;
+            }
+
+            .news {
+                background: white;
+                padding: 15px;
+                margin-bottom: 15px;
+                border-radius: 12px;
+            }
+
+            h1 {
+                text-align: center;
+            }
+
+            .date {
+                color: gray;
+                font-size: 14px;
+            }
+        </style>
+    </head>
+    <body>
+
+    <h1>📰 Новости</h1>
+    """
+
+    if not rows:
+        html += "<p>Новостей пока нет.</p>"
+
+    for row in rows:
+        html += f"""
+        <div class="news">
+            <h2>{row[1]}</h2>
+            <p class="date">📅 {row[3]}</p>
+            <p>{row[2]}</p>
+        </div>
+        """
+
+    html += """
+    <p><a href="/">← На главную</a></p>
+
+    </body>
+    </html>
+    """
+
+    return html
 
 @app.route("/tournaments")
 def tournaments():
@@ -192,7 +267,13 @@ def tournaments():
                 <a href="/create">
                     <button>➕ Создать турнир</button>
                 </a>
+
+                <a href="/delete_tournament/{i}">
+                     <button>🗑️ Удалить турнир</button>
+                </a>
             </p>
+            
+
             """
 
     return html
@@ -296,6 +377,71 @@ def admin():
         </p>
     </form>
     """
+
+@app.route("/delete_tournament/<int:tournament_id>")
+def delete_tournament(tournament_id):
+    if not session.get("admin"):
+        return "<h2>❌ Доступ запрещён</h2>"
+
+    tournament = tournaments_list[tournament_id]
+
+    return f"""
+    <h2>⚠️ Удаление турнира</h2>
+
+    <p>
+        Вы действительно хотите удалить турнир:
+    </p>
+
+    <h3>{tournament["name"]}</h3>
+
+    <p>⚠️ Все зарегистрированные участники также будут удалены.</p>
+
+    <p>
+        <a href="/confirm_delete_tournament/{tournament_id}">
+            <button style="background:red;color:white;">
+                🗑️ Да, удалить
+            </button>
+        </a>
+    </p>
+
+    <p>
+        <a href="/tournaments">
+            <button>❌ Отмена</button>
+        </a>
+    </p>
+    """
+
+@app.route("/confirm_delete_tournament/<int:tournament_id>")
+def confirm_delete_tournament(tournament_id):
+    if not session.get("admin"):
+        return "<h2>❌ Доступ запрещён</h2>"
+
+    tournament = tournaments_list[tournament_id]
+    db_id = tournament["id"]
+
+    conn = sqlite3.connect("chess_school.db")
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "DELETE FROM participants WHERE tournament_id = ?",
+        (db_id,)
+    )
+
+    cursor.execute(
+        "DELETE FROM tournaments WHERE id = ?",
+        (db_id,)
+    )
+
+    conn.commit()
+    conn.close()
+
+    tournaments_list.pop(tournament_id)
+
+    return """
+    <h2>✅ Турнир удалён</h2>
+    <p><a href="/tournaments">🏆 Вернуться к турнирам</a></p>
+    """
+
 
 @app.route("/participants/<int:tournament_id>")
 def show_participants(tournament_id):
@@ -420,7 +566,49 @@ def register(tournament_id):
         <a href="/tournaments">← Назад</a>
     </p>
     """
+@app.route("/create_news", methods=["GET", "POST"])
+def create_news():
+    if not session.get("admin"):
+        return "<h2>❌ Доступ запрещён</h2><p>Только для администратора.</p>"
 
+    if request.method == "POST":
+        title = request.form["title"]
+        text = request.form["text"]
+        date = request.form["date"]
+
+        conn = sqlite3.connect("chess_school.db")
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            INSERT INTO news (title, text, date)
+            VALUES (?, ?, ?)
+        """, (title, text, date))
+
+        conn.commit()
+        conn.close()
+
+        return '<h2>✅ Новость добавлена</h2><p><a href="/news">📰 Новости</a></p>'
+
+    return """
+    <h1>📰 Создать новость</h1>
+
+    <form method="POST">
+
+        <p>Заголовок:</p>
+        <input name="title" style="width:100%;">
+
+        <p>Текст новости:</p>
+        <textarea name="text" rows="8" style="width:100%;"></textarea>
+
+        <p>Дата:</p>
+        <input name="date" type="date">
+
+        <p>
+            <button type="submit">➕ Опубликовать</button>
+        </p>
+
+    </form>
+    """
 
 if __name__ == "__main__":
     app.run(debug=True, use_reloader=False)
@@ -457,6 +645,15 @@ CREATE TABLE IF NOT EXISTS participants (
     fide_id TEXT,
     rank TEXT,
     phone TEXT
+)
+""")
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS news (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT,
+    text TEXT,
+    date TEXT
 )
 """)
 
